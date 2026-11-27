@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ medicine.name }} — Аптека{% endblock %}
+
+{% block body %}
+<div class="page-wrapper">
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="{{ path('site_medicines_index') }}" class="brand">Аптека</a>
+            <nav class="nav-links">
+                <a href="{{ path('site_medicines_index') }}">Препарати</a>
+                <a href="{{ path('api_medicines_index') }}">JSON API</a>
+                <a href="{{ path('admin') }}">Адмінка</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <a href="{{ path('site_medicines_index') }}" class="back-link">&larr; Назад до каталогу</a>
+
+        <section class="detail-card">
+            <div class="card-top">
+                <span class="category-badge">{{ medicine.category.name }}</span>
+                {% if medicine.requiresPrescription %}
+                    <span class="badge badge-rx">За рецептом</span>
+                {% else %}
+                    <span class="badge badge-otc">Без рецепта</span>
+                {% endif %}
+            </div>
+
+            <h1 class="detail-title">{{ medicine.name }}</h1>
+
+            <dl class="detail-list">
+                <div class="detail-row">
+                    <dt>Виробник</dt>
+                    <dd>{{ medicine.manufacturer }}</dd>
+                </div>
+                <div class="detail-row">
+                    <dt>Ціна</dt>
+                    <dd class="price">{{ medicine.price|number_format(2, '.', ' ') }} грн</dd>
+                </div>
+                <div class="detail-row">
+                    <dt>Кількість на складі</dt>
+                    <dd class="{{ medicine.stockQuantity > 0 ? 'in-stock' : 'out-of-stock' }}">
+                        {% if medicine.stockQuantity > 0 %}
+                            {{ medicine.stockQuantity }} шт.
+                        {% else %}
+                            Немає в наявності
+                        {% endif %}
+                    </dd>
+                </div>
+                <div class="detail-row">
+                    <dt>Умови відпуску</dt>
+                    <dd>{{ medicine.requiresPrescription ? 'Потрібен рецепт лікаря' : 'Без рецепта' }}</dd>
+                </div>
+                <div class="detail-row">
+                    <dt>Категорія</dt>
+                    <dd>{{ medicine.category.name }}</dd>
+                </div>
+                {% if medicine.category.description %}
+                    <div class="detail-row">
+                        <dt>Опис категорії</dt>
+                        <dd>{{ medicine.category.description }}</dd>
+                    </div>
+                {% endif %}
+            </dl>
+        </section>
+    </main>
+</div>
+{% endblock %}

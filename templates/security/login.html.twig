@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Вхід до адмін-панелі — Аптека{% endblock %}
+
+{% block body %}
+<div class="page-wrapper">
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="{{ path('site_medicines_index') }}" class="brand">Аптека</a>
+            <nav class="nav-links">
+                <a href="{{ path('site_medicines_index') }}">Препарати</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container" style="max-width: 440px;">
+        <section class="detail-card">
+            <h1 class="detail-title" style="margin-top: 0; font-size: 1.5rem;">Вхід в адмін-панель</h1>
+
+            {% if error %}
+                <div style="background: #fee2e2; color: #991b1b; padding: 0.75rem 1rem; border-radius: 6px; margin-bottom: 1rem;">
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                </div>
+            {% endif %}
+
+            <form method="post">
+                <div style="margin-bottom: 1rem;">
+                    <label for="username" style="display: block; font-weight: 600; margin-bottom: 0.35rem;">Email</label>
+                    <input
+                        type="email"
+                        value="{{ last_username }}"
+                        name="_username"
+                        id="username"
+                        autocomplete="email"
+                        required
+                        autofocus
+                        style="width: 100%; padding: 0.55rem 0.75rem; border: 1px solid var(--border); border-radius: 6px; font-size: 1rem;"
+                    >
+                </div>
+
+                <div style="margin-bottom: 1.25rem;">
+                    <label for="password" style="display: block; font-weight: 600; margin-bottom: 0.35rem;">Пароль</label>
+                    <input
+                        type="password"
+                        name="_password"
+                        id="password"
+                        autocomplete="current-password"
+                        required
+                        style="width: 100%; padding: 0.55rem 0.75rem; border: 1px solid var(--border); border-radius: 6px; font-size: 1rem;"
+                    >
+                </div>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <button class="btn" type="submit" style="width: 100%; border: none; cursor: pointer; padding: 0.65rem 1rem; font-size: 1rem;">
+                    Увійти
+                </button>
+            </form>
+        </section>
+    </main>
+</div>
+{% endblock %}

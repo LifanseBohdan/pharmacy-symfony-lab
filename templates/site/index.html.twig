@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Аптека — Каталог препаратів{% endblock %}
+
+{% block body %}
+<div class="page-wrapper">
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="{{ path('site_medicines_index') }}" class="brand">Аптека</a>
+            <nav class="nav-links">
+                <a href="{{ path('site_medicines_index') }}">Препарати</a>
+                <a href="{{ path('api_medicines_index') }}">JSON API</a>
+                <a href="{{ path('admin') }}">Адмінка</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="page-head">
+            <h1>Каталог препаратів</h1>
+            <p class="subtitle">Усі лікарські засоби, наявні в базі аптеки</p>
+        </div>
+
+        {% if medicines is empty %}
+            <div class="empty-state">
+                <p>Наразі у каталозі немає жодного препарату.</p>
+            </div>
+        {% else %}
+            <div class="medicine-grid">
+                {% for medicine in medicines %}
+                    <article class="card">
+                        <div class="card-top">
+                            <span class="category-badge">{{ medicine.category.name }}</span>
+                            {% if medicine.requiresPrescription %}
+                                <span class="badge badge-rx">За рецептом</span>
+                            {% else %}
+                                <span class="badge badge-otc">Без рецепта</span>
+                            {% endif %}
+                        </div>
+
+                        <h2 class="card-title">
+                            <a href="{{ path('site_medicines_show', {id: medicine.id}) }}">
+                                {{ medicine.name }}
+                            </a>
+                        </h2>
+
+                        <p class="manufacturer">{{ medicine.manufacturer }}</p>
+
+                        <div class="card-footer">
+                            <div>
+                                <div class="price">{{ medicine.price|number_format(2, '.', ' ') }} грн</div>
+                                <div class="stock {{ medicine.stockQuantity > 0 ? 'in-stock' : 'out-of-stock' }}">
+                                    {% if medicine.stockQuantity > 0 %}
+                                        В наявності: {{ medicine.stockQuantity }} шт.
+                                    {% else %}
+                                        Немає в наявності
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <a href="{{ path('site_medicines_show', {id: medicine.id}) }}" class="btn">Детальніше</a>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </main>
+</div>
+{% endblock %}
